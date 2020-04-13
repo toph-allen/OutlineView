@@ -54,6 +54,9 @@ struct OutlineBranch: View {
                     OutlineBranch(item: item)
                 }
                 .padding(.leading, 24)
+                // // This animation is kinda janky
+                // .transition(.move(edge: .top))
+                // .animation(.linear(duration: 0.1))
             }
         }
     }
