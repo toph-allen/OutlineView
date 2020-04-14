@@ -11,15 +11,18 @@ import Foundation
 class OutlineData {
     let name: String
     var children: [OutlineData]
+    var open: Bool
     
     init(name: String) {
         self.name = name
         self.children = []
+        self.open = false
     }
     
     init(name: String, children: [OutlineData]) {
         self.name = name
         self.children = children
+        self.open = false
     }
     
     class func rootItem() -> OutlineData {

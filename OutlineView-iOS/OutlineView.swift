@@ -16,22 +16,23 @@ struct OutlineRow: View {
         HStack {
             Group {
                 if item.children.count > 0 {
-                    Image(open == false ? "arrowtriangle.right.fill.13-regular-small" : "arrowtriangle.down.fill.13-regular-small")
+                    Image(systemName: open == false ? "arrowtriangle.right.fill" : "arrowtriangle.down.fill")
                         .renderingMode(.template)
                         .foregroundColor(Color.secondary)
                 } else {
-                    Image("arrowtriangle.right.fill.13-regular-small")
+                    Image(systemName: "arrowtriangle.right.fill")
                         .opacity(0)
                 }
             }.frame(width: 16, height: 16)
-            Image(item.children.count > 0 ? "folder.13-regular-medium" : "doc.13-regular-medium")
+            Image(systemName: item.children.count > 0 ? "folder" : "doc")
                 .frame(width: 16, height: 16)
             Text(item.name)
                 .truncationMode(.tail)
                 .allowsTightening(true)
+            // FIXME: I should get rid of the spacer so you can tap anywhere on the row to open the folder.
             Spacer()
         }
-        .padding(4)
+        .padding()
     }
 }
 
@@ -56,8 +57,8 @@ struct OutlineBranch: View {
                 .padding(.leading, 24)
 
                 // FIXME: Animation is super-jank
-                // .transition(.move(edge: .top))
-                // .animation(.linear(duration: 0.1))
+                // .transition(.opacity)
+                // .animation(.easeInOut)
             }
         }
     }
