@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    let outlineData = OutlineData.rootItem()
+    let outlineData = OutlineData.getRoot()
     var body: some View {
         OutlineView(item: outlineData)
     }

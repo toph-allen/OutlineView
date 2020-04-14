@@ -25,6 +25,8 @@ struct OutlineRow: View {
                 }
             }.frame(width: 16, height: 16)
             Image(item.children.count > 0 ? "folder.13-regular-medium" : "doc.13-regular-medium")
+                .renderingMode(.template)
+                .foregroundColor(Color.primary)
                 .frame(width: 16, height: 16)
             Text(item.name)
                 .truncationMode(.tail)
@@ -78,7 +80,7 @@ struct OutlineView: View {
 
 struct Outline_Previews: PreviewProvider {
     static var previews: some View {
-        let root = OutlineData.rootItem()
+        let root = OutlineData.getRoot()
         return OutlineBranch(item: root)
             .frame(width: 200)
     }
