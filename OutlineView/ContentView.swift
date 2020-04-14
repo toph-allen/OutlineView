@@ -11,7 +11,7 @@ import SwiftUI
 struct ContentView: View {
     let outlineData = OutlineData.getRoot()
     var body: some View {
-        OutlineView(item: outlineData)
+        OutlineContainer(item: outlineData)
     }
 }
 

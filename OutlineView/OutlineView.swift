@@ -46,16 +46,20 @@ struct OutlineBranch: View {
     var body: some View {
         VStack(spacing: 0) {
             Section {
-                OutlineRow(item: item, open: $open)
-                    .onTapGesture {
-                        self.open.toggle()
+                if item.isRoot {
+                    EmptyView()
+                } else {
+                    OutlineRow(item: item, open: $open)
+                        .onTapGesture {
+                            self.open.toggle()
+                    }
                 }
             }
-            if open == true {
+            if open == true || item.isRoot == true {
                 ForEach(item.children, id: \.name) { item in
                     OutlineBranch(item: item)
                 }
-                .padding(.leading, 24)
+                .padding(.leading, item.isRoot ? 0 : 24)
 
                 // FIXME: Animation is super-jank
                 // .transition(.move(edge: .top))
@@ -65,7 +69,7 @@ struct OutlineBranch: View {
     }
 }
 
-struct OutlineView: View {
+struct OutlineContainer: View {
     var item: OutlineData
     
     var body: some View {

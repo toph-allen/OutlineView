@@ -10,7 +10,7 @@ import Foundation
 
 
 // I could add an isRoot variable...
-class OutlineData: ObservableObject {
+class OutlineData {
     let name: String
     var children: [OutlineData]
     @Published var open: Bool
