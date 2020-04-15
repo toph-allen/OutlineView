@@ -10,7 +10,8 @@ import SwiftUI
 
 
 struct OutlineRow: View {
-    @ObservedObject var item: OutlineData
+    @ObservedObject var item: OutlineNode
+    var level: CGFloat
 
     var body: some View {
         HStack {
@@ -27,7 +28,7 @@ struct OutlineRow: View {
             }
             .frame(width: 16, height: 16)
             .onTapGesture { // Can I make this tap area bigger?
-                self.item.open.toggle()
+                self.item.open.toggle() // I think this
             }
             
             Image(item.children.count > 0 ? "folder.13-regular-medium" : "doc.13-regular-medium")
@@ -44,35 +45,43 @@ struct OutlineRow: View {
         }
         .padding(.vertical, 4)
         .contentShape(Rectangle())
+        .padding(.leading, level * 24)
     }
 }
 
 
 struct OutlineBranch: View {
-    @ObservedObject var item: OutlineData
-    @Binding var selectedItem: OutlineData?
-    
+    @ObservedObject var item: OutlineNode
+    @Binding var selectedItem: OutlineNode?
+    var level: CGFloat
     
     @ViewBuilder
     var body: some View {
         VStack(spacing: 0) {
         // List {
-            Section() {
-                if item.isRoot {
-                    EmptyView()
-                } else {
-                    OutlineRow(item: item)
-                    .onTapGesture {
-                        self.selectedItem = self.item
+            if item.isRoot {
+                EmptyView()
+            } else {
+                VStack {
+                    if item == selectedItem {
+                        OutlineRow(item: item, level: level)
+                            .background(Color.accentColor)
+                    } else {
+                        OutlineRow(item: item, level: level)
+                        .onTapGesture {
+                            if self.item.hasContent == true {
+                                self.selectedItem = self.item
+                            }
+                        }
                     }
-                    // .border(Color.gray)
                 }
+                // .border(Color.gray)
             }
             if item.open == true || item.isRoot == true {
                 ForEach(item.children, id: \.id) { item in
-                    OutlineBranch(item: item, selectedItem: self.$selectedItem)
+                    OutlineBranch(item: item, selectedItem: self.$selectedItem, level: self.level + 1)
                 }
-                .padding(.leading, item.isRoot ? 0 : 24)
+                // .padding(.leading, item.isRoot ? 0 : 24)
 
                 // FIXME: Animation is super-jank
                 // .transition(.move(edge: .top))
@@ -83,19 +92,21 @@ struct OutlineBranch: View {
 }
 
 struct OutlineSection: View {
-    @ObservedObject var rootItem: OutlineData
-    @Binding var selectedItem: OutlineData?
+    @ObservedObject var rootItem: RootNode
+    @Binding var selectedItem: OutlineNode?
     
     var body: some View {
         // Embedding it in a List rather than a ScrollView might let me tag items for selection.
         // It also definitely gives it different metrics — a margin in the window, for example. Not sure which is better.
-        List(selection: $selectedItem) {
-            Section {
+        List {
+            // The padding in the section header is there to adjust for the inset hack.
+            Section(header: Text(rootItem.name).padding(.leading, 8)) {
                 ForEach(rootItem.children, id: \.id) { item in
-                        OutlineBranch(item: item, selectedItem: self.$selectedItem)
+                    OutlineBranch(item: item, selectedItem: self.$selectedItem, level: 0)
                 }
                 // Spacer()
-            }.collapsible(false)
+            }
+            .collapsible(false)
         }
         .listStyle(SidebarListStyle())
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -109,11 +120,11 @@ struct OutlineSection: View {
 
 struct Outline_Previews: PreviewProvider {
     static var previews: some View {
-        let root = OutlineData.getRoot()
+        let root = RootNode.getRoot()
         return Group {
-            OutlineSection(rootItem: root, selectedItem: .constant(root.children[0]))
+            OutlineSection(rootItem: root, selectedItem: .constant(root.children[1]))
                 .frame(width: 200)
-            OutlineBranch(item: root, selectedItem: .constant(root.children[1]))
+            OutlineBranch(item: root, selectedItem: .constant(root.children[1]), level: 0)
                 .frame(width: 200)
         }
     }

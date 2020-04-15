@@ -9,22 +9,23 @@
 import SwiftUI
 
 struct SplitView: View {
-    var containers: OutlineData
-    @State var selectedItem: OutlineData?
+    var rootNode: RootNode
+    @State var selectedItem: OutlineNode?
 
     var body: some View {
         NavigationView {
-            OutlineSection(rootItem: containers, selectedItem: $selectedItem)
+            OutlineSection(rootItem: rootNode, selectedItem: $selectedItem)
                 .frame(idealWidth: 150, maxHeight: .infinity)
             DetailView(item: selectedItem)
+                .frame(idealWidth: 470, maxHeight: .infinity)
         }
     }
 }
 
 struct SplitView_Previews: PreviewProvider {
     static var previews: some View {
-        let item = OutlineData.getRoot()
+        let item = RootNode.getRoot()
         
-        return SplitView(containers: item)
+        return SplitView(rootNode: item)
     }
 }

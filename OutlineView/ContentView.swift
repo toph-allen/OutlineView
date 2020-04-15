@@ -9,9 +9,9 @@
 import SwiftUI
 
 struct ContentView: View {
-    let outlineData = OutlineData.getRoot()
+    let rootNode = RootNode.getRoot()
     var body: some View {
-        SplitView(containers: outlineData)
+        SplitView(rootNode: rootNode)
     }
 }
 
