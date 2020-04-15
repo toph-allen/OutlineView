@@ -10,8 +10,7 @@ import Foundation
 
 let foldersHaveContent: Bool = false
 
-
-// I could add an isRoot variable...
+// TODO: I should probably split folders out to be a subclass.
 class OutlineNode: ObservableObject, Identifiable, Hashable {
     var id: UUID = UUID()
     let name: String
@@ -21,6 +20,23 @@ class OutlineNode: ObservableObject, Identifiable, Hashable {
     var isRoot: Bool = false
     var hasContent: Bool = true
     
+    var isFolder: Bool {
+        get {
+            return self.children.count > 0
+        }
+    }
+    
+    var childrenFoldersFirst: [OutlineNode] {
+        get {
+            return self.children.sorted { c1, c2 in
+                if c1.isFolder == c2.isFolder {
+                    return c1.name < c2.name
+                } else {
+                    return c1.isFolder && !c2.isFolder // This sorts the trues first
+                }
+            }
+        }
+    }
     
     init(name: String) {
         self.name = name

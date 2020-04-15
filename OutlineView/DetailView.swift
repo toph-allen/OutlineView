@@ -28,7 +28,7 @@ struct DetailView: View {
                     .frame(alignment: .center)
             }
         }
-        .frame(minWidth: 100, maxWidth: .infinity, maxHeight: .infinity)
+        .frame(minWidth: 320, maxWidth: .infinity, minHeight: 320, maxHeight: .infinity)
     }
 }
 

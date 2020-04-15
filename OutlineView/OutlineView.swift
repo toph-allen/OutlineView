@@ -12,6 +12,7 @@ import SwiftUI
 struct OutlineRow: View {
     @ObservedObject var item: OutlineNode
     var level: CGFloat
+    // @Binding var selected: Bool
 
     var body: some View {
         HStack {
@@ -33,8 +34,9 @@ struct OutlineRow: View {
             
             Image(item.children.count > 0 ? "folder.13-regular-medium" : "doc.13-regular-medium")
                 .renderingMode(.template)
-                .foregroundColor(Color.primary)
+                // .foregroundColor(Color.primary)
                 .frame(width: 16, height: 16)
+                .padding(.leading, -4)
             
             Text(item.name)
                 .lineLimit(1) // If this is not present, non-leaf items will wrap
@@ -66,6 +68,8 @@ struct OutlineBranch: View {
                     if item == selectedItem {
                         OutlineRow(item: item, level: level)
                             .background(Color.accentColor)
+                            .foregroundColor(Color.white)
+                            .clipShape(RoundedRectangle(cornerRadius: 5, style: .continuous))
                     } else {
                         OutlineRow(item: item, level: level)
                         .onTapGesture {
@@ -78,7 +82,7 @@ struct OutlineBranch: View {
                 // .border(Color.gray)
             }
             if item.open == true || item.isRoot == true {
-                ForEach(item.children, id: \.id) { item in
+                ForEach(item.childrenFoldersFirst, id: \.id) { item in
                     OutlineBranch(item: item, selectedItem: self.$selectedItem, level: self.level + 1)
                 }
                 // .padding(.leading, item.isRoot ? 0 : 24)
@@ -101,7 +105,7 @@ struct OutlineSection: View {
         List {
             // The padding in the section header is there to adjust for the inset hack.
             Section(header: Text(rootItem.name).padding(.leading, 8)) {
-                ForEach(rootItem.children, id: \.id) { item in
+                ForEach(rootItem.childrenFoldersFirst, id: \.id) { item in
                     OutlineBranch(item: item, selectedItem: self.$selectedItem, level: 0)
                 }
                 // Spacer()
