@@ -10,7 +10,8 @@ import Foundation
 
 
 // I could add an isRoot variable...
-class OutlineData {
+class OutlineData: ObservableObject, Identifiable, Hashable {
+    var id: UUID = UUID()
     let name: String
     var children: [OutlineData]
     @Published var open: Bool
@@ -36,6 +37,14 @@ class OutlineData {
         self.children = children
         self.isRoot = isRoot
         self.open = self.isRoot
+    }
+    
+    static func == (lhs: OutlineData, rhs: OutlineData) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
 
     class func getRoot() -> OutlineData {
