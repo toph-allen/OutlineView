@@ -16,7 +16,7 @@ class OutlineNode: ObservableObject, Identifiable, Hashable {
     let name: String
     var children: [OutlineNode]
     var parent: OutlineNode?
-    @Published var open: Bool = false
+    @Published var open: Bool = true
     var isRoot: Bool = false
     var hasContent: Bool = true
     

@@ -59,7 +59,7 @@ struct OutlineBranch: View {
     
     @ViewBuilder
     var body: some View {
-        VStack(spacing: 0) {
+        VStack(spacing: 2) { // spacing: 2 is what List uses
         // List {
             if item.isRoot {
                 EmptyView()
