@@ -65,8 +65,8 @@ class OutlineNode: ObservableObject, Identifiable, Hashable {
 class RootNode: OutlineNode {
     init(name: String, children: [OutlineNode], isRoot: Bool) {
         super.init(name: name, children: children)
-        self.isRoot = isRoot
-        self.open = self.isRoot
+        // self.isRoot = isRoot
+        // self.open = self.isRoot
     }
 
     class func getRoot() -> RootNode {
