@@ -12,7 +12,6 @@ import SwiftUI
 struct OutlineRow: View {
     @ObservedObject var item: OutlineNode
     var level: CGFloat
-    // @Binding var selected: Bool
 
     var body: some View {
         HStack {
@@ -28,13 +27,12 @@ struct OutlineRow: View {
                 }
             }
             .frame(width: 16, height: 16)
-            .onTapGesture { // Can I make this tap area bigger?
-                self.item.open.toggle() // I think this
+            .onTapGesture {
+                self.item.open.toggle()
             }
             
             Image(item.children.count > 0 ? "folder.13-regular-medium" : "doc.13-regular-medium")
                 .renderingMode(.template)
-                // .foregroundColor(Color.primary)
                 .frame(width: 16, height: 16)
                 .padding(.leading, -4)
             
@@ -60,7 +58,6 @@ struct OutlineBranch: View {
     @ViewBuilder
     var body: some View {
         VStack(spacing: 2) { // spacing: 2 is what List uses
-        // List {
             if item.isRoot {
                 EmptyView()
             } else {
@@ -79,7 +76,6 @@ struct OutlineBranch: View {
                         }
                     }
                 }
-                // .border(Color.gray)
             }
             if item.open == true || item.isRoot == true {
                 ForEach(item.childrenFoldersFirst, id: \.id) { item in
