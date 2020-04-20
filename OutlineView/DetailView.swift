@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct DetailView: View {
-    var item: OutlineNode?
+    var item: ExampleClass?
     
     @ViewBuilder
     var body: some View {
@@ -34,7 +34,7 @@ struct DetailView: View {
 
 struct DetailView_Previews: PreviewProvider {
     static var previews: some View {
-        let item = OutlineNode(name: "Item 1.1")
+        let item = ExampleClass(name: "Item 1.1")
         
         return Group {
             DetailView(item: item)

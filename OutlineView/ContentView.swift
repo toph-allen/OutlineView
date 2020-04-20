@@ -12,7 +12,8 @@ import SwiftUI
 struct ContentView: View {
     let rootNode = exampleData()
     var body: some View {
-        SplitView(rootNode: rootNode)
+        Text("Hello World!")
+        // SplitView(rootNode: rootNode)
     }
 }
 

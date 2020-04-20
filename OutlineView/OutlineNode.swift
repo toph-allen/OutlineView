@@ -14,7 +14,7 @@ let foldersHaveContent: Bool = false
 protocol OutlineRepresentable: ObservableObject, Identifiable, Hashable {
     var name: String { get }
     var children: [Self] { get }
-    var parent: Self? { get }
+    // var parent: Self? { get }
     var hasContent: Bool { get }
 }
 // TODO: The way to go forward with this is to then give OutlineNode an `init()` method for OutlineRepresentable objects, and then maybe to give RootItem a similar method? And also to make a class? of object called OutlineViewData, and give it a method to init from a random access collection of OutlineRepresentable items.
@@ -80,6 +80,7 @@ class OutlineNode<T: OutlineRepresentable>: ObservableObject, Identifiable, Hash
     //     }
     // }
     
+    // Should these also be defined using the item
     static func == (lhs: OutlineNode, rhs: OutlineNode) -> Bool {
         return lhs.id == rhs.id
     }

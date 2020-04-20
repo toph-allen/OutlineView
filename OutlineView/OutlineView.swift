@@ -9,16 +9,17 @@ import Foundation
 import SwiftUI
 
 
-struct OutlineRow: View {
-    @ObservedObject var item: OutlineNode
+struct OutlineRow<T: OutlineRepresentable>: View {
+    typealias NodeType = OutlineNode<T>
+    @ObservedObject var node: NodeType
     var level: CGFloat
 
     var body: some View {
         HStack {
             
             Group {
-                if item.children.count > 0 {
-                    Image(item.open == false ? "arrowtriangle.right.fill.13-regular-small" : "arrowtriangle.down.fill.13-regular-small")
+                if node.children.count > 0 {
+                    Image(node.open == false ? "arrowtriangle.right.fill.13-regular-small" : "arrowtriangle.down.fill.13-regular-small")
                         .renderingMode(.template)
                         .foregroundColor(Color.secondary)
                 } else {
@@ -28,15 +29,15 @@ struct OutlineRow: View {
             }
             .frame(width: 16, height: 16)
             .onTapGesture {
-                self.item.open.toggle()
+                self.node.open.toggle()
             }
             
-            Image(item.children.count > 0 ? "folder.13-regular-medium" : "doc.13-regular-medium")
+            Image(node.children.count > 0 ? "folder.13-regular-medium" : "doc.13-regular-medium")
                 .renderingMode(.template)
                 .frame(width: 16, height: 16)
                 .padding(.leading, -4)
             
-            Text(item.name)
+            Text(node.name)
                 .lineLimit(1) // If this is not present, non-leaf items will wrap
                 .truncationMode(.tail)
                 .allowsTightening(true)
@@ -50,38 +51,39 @@ struct OutlineRow: View {
 }
 
 
-struct OutlineBranch: View {
-    @ObservedObject var item: OutlineNode
-    @Binding var selectedItem: OutlineNode?
+struct OutlineBranch<T: OutlineRepresentable>: View {
+    typealias NodeType = OutlineNode<T>
+    @ObservedObject var node: NodeType
+    @Binding var selectedItem: NodeType?
     var level: CGFloat
     
     @ViewBuilder
     var body: some View {
         VStack(spacing: 2) { // spacing: 2 is what List uses
-            if item.isRoot {
+            if level == -1 {
                 EmptyView()
             } else {
                 VStack {
-                    if item == selectedItem {
-                        OutlineRow(item: item, level: level)
+                    if node == selectedItem {
+                        OutlineRow(node: node, level: level)
                             .background(Color.accentColor)
                             .foregroundColor(Color.white)
                             .clipShape(RoundedRectangle(cornerRadius: 5, style: .continuous))
                     } else {
-                        OutlineRow(item: item, level: level)
+                        OutlineRow(node: node, level: level)
                         .onTapGesture {
-                            if self.item.selectable == true {
-                                self.selectedItem = self.item
+                            if self.node.selectable == true {
+                                self.selectedItem = self.node
                             }
                         }
                     }
                 }
             }
-            if item.open == true || item.isRoot == true {
-                ForEach(item.childrenFoldersFirst, id: \.id) { item in
-                    OutlineBranch(item: item, selectedItem: self.$selectedItem, level: self.level + 1)
+            if node.open == true || level == -1 {
+                ForEach(node.childrenFoldersFirst, id: \.id) { node in
+                    OutlineBranch(node: node, selectedItem: self.$selectedItem, level: self.level + 1)
                 }
-                // .padding(.leading, item.isRoot ? 0 : 24)
+                // .padding(.leading, node.isRoot ? 0 : 24)
 
                 // FIXME: Animation is super-jank
                 // .transition(.move(edge: .top))
@@ -91,18 +93,19 @@ struct OutlineBranch: View {
     }
 }
 
-struct OutlineSection<OutlineNode>: View {
-    var rootItem: OutlineNode
-    @Binding var selectedItem: OutlineNode?
+struct OutlineSection<T: OutlineRepresentable>: View {
+    typealias NodeType = OutlineNode<T>
+    var rootNode: NodeType
+    @Binding var selectedItem: NodeType?
     
     var body: some View {
         // Embedding it in a List rather than a ScrollView might let me tag items for selection.
         // It also definitely gives it different metrics — a margin in the window, for example. Not sure which is better.
         List {
             // The padding in the section header is there to adjust for the inset hack.
-            Section(header: Text(rootItem.name).padding(.leading, 8)) {
-                ForEach(rootItem.childrenFoldersFirst, id: \.id) { item in
-                    OutlineBranch(item: item, selectedItem: self.$selectedItem, level: 0)
+            Section(header: Text(self.rootNode.name).padding(.leading, 8)) {
+                ForEach(rootNode.childrenFoldersFirst, id: \.id) { node in
+                    OutlineBranch(node: node, selectedItem: self.$selectedItem, level: -1)
                 }
                 // Spacer()
             }
@@ -112,7 +115,12 @@ struct OutlineSection<OutlineNode>: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding(.leading, -8)
         // A hack for list row insets not working. This hack also applies to the section header though.
-        
+    }
+}
+
+extension OutlineSection {
+    init(item: T) {
+        rootNode = OutlineNode(item: item)
     }
 }
 
@@ -120,12 +128,8 @@ struct OutlineSection<OutlineNode>: View {
 
 struct Outline_Previews: PreviewProvider {
     static var previews: some View {
-        let root = exampleData()
-        return Group {
-            OutlineSection(rootItem: root, selectedItem: .constant(root.children[1]))
-                .frame(width: 200)
-            OutlineBranch(item: root, selectedItem: .constant(root.children[1]), level: 0)
-                .frame(width: 200)
-        }
+        let example = exampleData()
+        OutlineSection(item: example)
+            .frame(width: 200)
     }
 }
