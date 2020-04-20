@@ -8,13 +8,13 @@
 
 import SwiftUI
 
+
 struct ContentView: View {
-    let rootNode = RootNode.getRoot()
+    let rootNode = exampleData()
     var body: some View {
         SplitView(rootNode: rootNode)
     }
 }
-
 
 
 struct ContentView_Previews: PreviewProvider {

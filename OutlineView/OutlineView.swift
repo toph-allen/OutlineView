@@ -70,7 +70,7 @@ struct OutlineBranch: View {
                     } else {
                         OutlineRow(item: item, level: level)
                         .onTapGesture {
-                            if self.item.hasContent == true {
+                            if self.item.selectable == true {
                                 self.selectedItem = self.item
                             }
                         }
@@ -91,8 +91,8 @@ struct OutlineBranch: View {
     }
 }
 
-struct OutlineSection: View {
-    @ObservedObject var rootItem: RootNode
+struct OutlineSection<OutlineNode>: View {
+    var rootItem: OutlineNode
     @Binding var selectedItem: OutlineNode?
     
     var body: some View {
@@ -120,7 +120,7 @@ struct OutlineSection: View {
 
 struct Outline_Previews: PreviewProvider {
     static var previews: some View {
-        let root = RootNode.getRoot()
+        let root = exampleData()
         return Group {
             OutlineSection(rootItem: root, selectedItem: .constant(root.children[1]))
                 .frame(width: 200)

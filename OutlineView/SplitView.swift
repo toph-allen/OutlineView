@@ -24,7 +24,7 @@ struct SplitView: View {
 
 struct SplitView_Previews: PreviewProvider {
     static var previews: some View {
-        let item = RootNode.getRoot()
+        let item = exampleData()
         
         return SplitView(rootNode: item)
     }

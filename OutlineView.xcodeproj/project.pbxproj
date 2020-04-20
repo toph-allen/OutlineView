@@ -15,6 +15,7 @@
 		6D0190AA244528180038CE4E /* OutlineViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D0190A9244528180038CE4E /* OutlineViewTests.swift */; };
 		6D0190B5244528180038CE4E /* OutlineViewUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D0190B4244528180038CE4E /* OutlineViewUITests.swift */; };
 		6D0190C3244528350038CE4E /* OutlineNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D0190C2244528350038CE4E /* OutlineNode.swift */; };
+		6D02565F244E217C00A56049 /* ExampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02565E244E217C00A56049 /* ExampleData.swift */; };
 		6D5FADE424464DB3008A78BF /* SplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D5FADE324464DB3008A78BF /* SplitView.swift */; };
 		6D5FADE62446516C008A78BF /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D5FADE52446516C008A78BF /* DetailView.swift */; };
 		6D8598432445492A00E0C492 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8598422445492A00E0C492 /* AppDelegate.swift */; };
@@ -25,7 +26,6 @@
 		6D85984F2445492B00E0C492 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6D85984D2445492B00E0C492 /* LaunchScreen.storyboard */; };
 		6D85985A2445492B00E0C492 /* OutlineView_iOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8598592445492B00E0C492 /* OutlineView_iOSTests.swift */; };
 		6D8598652445492C00E0C492 /* OutlineView_iOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8598642445492C00E0C492 /* OutlineView_iOSUITests.swift */; };
-		6D859871244549C500E0C492 /* OutlineNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D0190C2244528350038CE4E /* OutlineNode.swift */; };
 		6D85987324454A1900E0C492 /* OutlineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D0190C42445286A0038CE4E /* OutlineView.swift */; };
 		6D85987524454A1F00E0C492 /* OutlineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D85987424454A1F00E0C492 /* OutlineView.swift */; };
 /* End PBXBuildFile section */
@@ -78,6 +78,7 @@
 		6D0190B6244528180038CE4E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6D0190C2244528350038CE4E /* OutlineNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineNode.swift; sourceTree = "<group>"; };
 		6D0190C42445286A0038CE4E /* OutlineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineView.swift; sourceTree = "<group>"; };
+		6D02565E244E217C00A56049 /* ExampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleData.swift; sourceTree = "<group>"; };
 		6D5FADE324464DB3008A78BF /* SplitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitView.swift; sourceTree = "<group>"; };
 		6D5FADE52446516C008A78BF /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
 		6D8598402445492A00E0C492 /* OutlineView-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OutlineView-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -147,7 +148,6 @@
 		6D019087244528150038CE4E = {
 			isa = PBXGroup;
 			children = (
-				6D0190C2244528350038CE4E /* OutlineNode.swift */,
 				6D019092244528150038CE4E /* OutlineView */,
 				6D0190A8244528180038CE4E /* OutlineViewTests */,
 				6D0190B3244528180038CE4E /* OutlineViewUITests */,
@@ -174,6 +174,8 @@
 		6D019092244528150038CE4E /* OutlineView */ = {
 			isa = PBXGroup;
 			children = (
+				6D02565E244E217C00A56049 /* ExampleData.swift */,
+				6D0190C2244528350038CE4E /* OutlineNode.swift */,
 				6D85987424454A1F00E0C492 /* OutlineView.swift */,
 				6D5FADE52446516C008A78BF /* DetailView.swift */,
 				6D5FADE324464DB3008A78BF /* SplitView.swift */,
@@ -478,6 +480,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6D02565F244E217C00A56049 /* ExampleData.swift in Sources */,
 				6D0190C3244528350038CE4E /* OutlineNode.swift in Sources */,
 				6D5FADE62446516C008A78BF /* DetailView.swift in Sources */,
 				6D019096244528150038CE4E /* ContentView.swift in Sources */,
@@ -509,7 +512,6 @@
 			files = (
 				6D8598432445492A00E0C492 /* AppDelegate.swift in Sources */,
 				6D8598452445492A00E0C492 /* SceneDelegate.swift in Sources */,
-				6D859871244549C500E0C492 /* OutlineNode.swift in Sources */,
 				6D85987324454A1900E0C492 /* OutlineView.swift in Sources */,
 				6D8598472445492A00E0C492 /* ContentView.swift in Sources */,
 			);
