@@ -96,6 +96,7 @@
 		6D8598662445492C00E0C492 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6D8598702445496900E0C492 /* OutlineView-iOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "OutlineView-iOS.entitlements"; sourceTree = "<group>"; };
 		6D85987424454A1F00E0C492 /* OutlineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineView.swift; sourceTree = "<group>"; };
+		6DBE13B6244F8D1D009222D4 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,6 +148,7 @@
 		6D019087244528150038CE4E = {
 			isa = PBXGroup;
 			children = (
+				6DBE13B6244F8D1D009222D4 /* README.md */,
 				6D0190C2244528350038CE4E /* OutlineNode.swift */,
 				6D019092244528150038CE4E /* OutlineView */,
 				6D0190A8244528180038CE4E /* OutlineViewTests */,
