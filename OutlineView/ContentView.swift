@@ -10,10 +10,16 @@ import SwiftUI
 
 
 struct ContentView: View {
-    let rootNode = exampleData()
+    let rootItem: ExampleClass = exampleData()
+    @State var selectedItem: OutlineNode<ExampleClass>? = nil
+    
     var body: some View {
-        Text("Hello World!")
-        // SplitView(rootNode: rootNode)
+        NavigationView {
+            OutlineSection(rootItem: rootItem, selectedItem: $selectedItem)
+                .frame(minWidth: 200, maxHeight: .infinity)
+            DetailView(item: selectedItem?.item)
+                .frame(maxHeight: .infinity)
+        }
     }
 }
 

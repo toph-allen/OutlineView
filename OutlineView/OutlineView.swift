@@ -7,6 +7,7 @@
 //
 import Foundation
 import SwiftUI
+import Combine
 
 
 struct OutlineRow<T: OutlineRepresentable>: View {
@@ -37,6 +38,7 @@ struct OutlineRow<T: OutlineRepresentable>: View {
                 .frame(width: 16, height: 16)
                 .padding(.leading, -4)
             
+
             Text(node.name)
                 .lineLimit(1) // If this is not present, non-leaf items will wrap
                 .truncationMode(.tail)
@@ -98,15 +100,21 @@ struct OutlineSection<T: OutlineRepresentable>: View {
     var rootNode: NodeType
     @Binding var selectedItem: NodeType?
     
+    init(rootItem: T, selectedItem: Binding<NodeType?>) {
+        self.rootNode = OutlineNode(item: rootItem)
+        self._selectedItem = selectedItem
+    }
+    
     var body: some View {
         // Embedding it in a List rather than a ScrollView might let me tag items for selection.
         // It also definitely gives it different metrics — a margin in the window, for example. Not sure which is better.
         List {
             // The padding in the section header is there to adjust for the inset hack.
             Section(header: Text(self.rootNode.name).padding(.leading, 8)) {
-                ForEach(rootNode.childrenFoldersFirst, id: \.id) { node in
-                    OutlineBranch(node: node, selectedItem: self.$selectedItem, level: -1)
-                }
+                OutlineBranch(node: rootNode, selectedItem: self.$selectedItem, level: -1)
+                // ForEach(rootNode.childrenFoldersFirst, id: \.id) { node in
+                //     OutlineBranch(node: node, selectedItem: self.$selectedItem, level: 1)
+                // }
                 // Spacer()
             }
             .collapsible(false)
@@ -118,18 +126,20 @@ struct OutlineSection<T: OutlineRepresentable>: View {
     }
 }
 
-extension OutlineSection {
-    init(item: T) {
-        rootNode = OutlineNode(item: item)
-    }
-}
+// extension OutlineSection {
+//     init(item: T) {
+//         self.rootNode = OutlineNode(item: item)
+//         // self.selectedItem = nil
+//     }
+// }
 
 
 
-struct Outline_Previews: PreviewProvider {
-    static var previews: some View {
-        let example = exampleData()
-        OutlineSection(item: example)
-            .frame(width: 200)
-    }
-}
+// struct Outline_Previews: PreviewProvider {
+//     static var previews: some View {
+//         let example = exampleData()
+//         
+//         return OutlineSection(rootItem: example, selectedItem: .constant(nil))
+//             .frame(width: 200)
+//     }
+// }
