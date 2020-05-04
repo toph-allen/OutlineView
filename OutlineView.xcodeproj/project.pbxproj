@@ -178,8 +178,8 @@
 				6D0190C2244528350038CE4E /* OutlineNode.swift */,
 				6D85987424454A1F00E0C492 /* OutlineView.swift */,
 				6D5FADE52446516C008A78BF /* DetailView.swift */,
-				6D5FADE324464DB3008A78BF /* SplitView.swift */,
 				6D019095244528150038CE4E /* ContentView.swift */,
+				6D5FADE324464DB3008A78BF /* SplitView.swift */,
 				6D019093244528150038CE4E /* AppDelegate.swift */,
 				6D019097244528180038CE4E /* Assets.xcassets */,
 				6D01909C244528180038CE4E /* Main.storyboard */,
@@ -374,7 +374,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1140;
-				LastUpgradeCheck = 1140;
+				LastUpgradeCheck = 1150;
 				ORGANIZATIONNAME = "Toph Allen";
 				TargetAttributes = {
 					6D01908F244528150038CE4E = {
@@ -696,6 +696,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = OutlineView/OutlineView.entitlements;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"OutlineView/Preview Content\"";
@@ -719,6 +720,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = OutlineView/OutlineView.entitlements;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"OutlineView/Preview Content\"";

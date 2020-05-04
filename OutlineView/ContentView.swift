@@ -10,16 +10,10 @@ import SwiftUI
 
 
 struct ContentView: View {
-    let rootItem: ExampleClass = exampleData()
-    @State var selectedItem: OutlineNode<ExampleClass>? = nil
+    let items: [ExampleClass] = exampleArray()
     
     var body: some View {
-        NavigationView {
-            OutlineSection(rootItem: rootItem, selectedItem: $selectedItem)
-                .frame(minWidth: 200, maxHeight: .infinity)
-            DetailView(item: selectedItem?.item)
-                .frame(maxHeight: .infinity)
-        }
+        SplitView(items: items)
     }
 }
 
@@ -29,3 +23,4 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
+

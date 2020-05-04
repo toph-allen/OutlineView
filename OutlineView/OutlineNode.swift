@@ -13,8 +13,8 @@ let foldersHaveContent: Bool = false
 
 protocol OutlineRepresentable: ObservableObject, Identifiable, Hashable {
     var name: String { get }
-    var children: [Self] { get }
-    // var parent: Self? { get }
+    var children: [Self]? { get }
+    var parent: Self? { get }
     var hasContent: Bool { get }
 }
 // TODO: The way to go forward with this is to then give OutlineNode an `init()` method for OutlineRepresentable objects, and then maybe to give RootItem a similar method? And also to make a class? of object called OutlineViewData, and give it a method to init from a random access collection of OutlineRepresentable items.
@@ -22,63 +22,51 @@ protocol OutlineRepresentable: ObservableObject, Identifiable, Hashable {
 
 
 
-// TODO (tentative): I should probably split folders out to be a subclass?
 class OutlineNode<T: OutlineRepresentable>: ObservableObject, Identifiable, Hashable {
     // var id: UUID = UUID()
-    var item: T
-    var children: [OutlineNode]
-    // var parent: OutlineNode?
+    var representedObject: T?
+    var children: [OutlineNode]?
+    var parent: OutlineNode?
     var selectable: Bool = true
     @Published var open: Bool = false
     
     // Make it conform to identifiable etc. by using its item's properties
-    var id: T.ID {
+    var id: T.ID? {
         get {
-            return self.item.id
+            return self.representedObject?.id
         }
     }
     
     var name: String {
         get {
-            return self.item.name
+            return self.representedObject?.name ?? ""
         }
     }
     
-    var isFolder: Bool {
+    var isLeaf: Bool {
         get {
-            return self.children.count > 0
-        }
-    }
-    
-    var childrenFoldersFirst: [OutlineNode] {
-        get {
-            return self.children.sorted { c1, c2 in
-                if c1.isFolder == c2.isFolder {
-                    return c1.name < c2.name
-                } else {
-                    return c1.isFolder && !c2.isFolder // This sorts the trues first
-                }
+            if self.children == nil {
+                return true
+            } else {
+                return self.children!.count == 0
             }
         }
     }
     
-    init(item: T) {
-        self.item = item
-        self.children = [OutlineNode]()
-        self.selectable = item.hasContent
-        for child in item.children {
-            self.children.append(OutlineNode(item: child))
+    var childrenFoldersFirst: [OutlineNode]? {
+        get {
+            guard self.children != nil else {
+                return nil
+            }
+            return self.children!.sorted { c1, c2 in
+                if c1.isLeaf == c2.isLeaf {
+                    return c1.name < c2.name
+                } else {
+                    return !c1.isLeaf && c2.isLeaf // This sorts the trues last?
+                }
+            }
         }
     }
-    
-    // init<T: OutlineRepresentable>(item: T, parent: OutlineNode) {
-    //     self.children = [OutlineNode]()
-    //     self.parent = parent
-    //     self.selectable = item.hasContent
-    //     for child in item.children {
-    //         self.children.append(OutlineNode(item: child, parent: self))
-    //     }
-    // }
     
     // Should these also be defined using the item
     static func == (lhs: OutlineNode, rhs: OutlineNode) -> Bool {
@@ -88,6 +76,44 @@ class OutlineNode<T: OutlineRepresentable>: ObservableObject, Identifiable, Hash
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
-}
     
+    init(representedObject: T?, parent: OutlineNode? = nil) {
+        self.representedObject = representedObject
+        
+        // If represented objects have children, make child nodes, passing self as parent.
+        if self.representedObject?.children != nil {
+            self.children = [OutlineNode]()
+            for child in representedObject!.children! {
+                self.children!.append(OutlineNode(representedObject: child, parent: self))
+            }
+        }
+        
+        // If we were given a parent, store it.
+        if parent != nil {
+            self.parent = parent
+        }
+    }
+    
+    init(children: [OutlineNode]) {
+        self.children = children
+    }
+}
+
+
+class OutlineTree<T: OutlineRepresentable>: ObservableObject {
+    var representedObjects: [T]
+    var rootNode: OutlineNode<T>
+
+    init(representedObjects: [T]) {
+        print("Making a new OutlineTree")
+        self.representedObjects = representedObjects
+        let rootChildren = representedObjects.filter({
+            $0.parent == nil
+        }).map({ representedObject in
+            OutlineNode(representedObject: representedObject)
+        })
+        self.rootNode = OutlineNode(children: rootChildren)
+    }
+}
+
 

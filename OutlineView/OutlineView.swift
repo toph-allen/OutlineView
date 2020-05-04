@@ -10,16 +10,15 @@ import SwiftUI
 import Combine
 
 
+// This view handles displaying the contents of each row for its object. Clicking its arrow image also toggles a node's open state.
 struct OutlineRow<T: OutlineRepresentable>: View {
-    typealias NodeType = OutlineNode<T>
-    @ObservedObject var node: NodeType
+    @ObservedObject var node: OutlineNode<T>
     var level: CGFloat
 
     var body: some View {
         HStack {
-            
             Group {
-                if node.children.count > 0 {
+                if !node.isLeaf {
                     Image(node.open == false ? "arrowtriangle.right.fill.13-regular-small" : "arrowtriangle.down.fill.13-regular-small")
                         .renderingMode(.template)
                         .foregroundColor(Color.secondary)
@@ -33,14 +32,13 @@ struct OutlineRow<T: OutlineRepresentable>: View {
                 self.node.open.toggle()
             }
             
-            Image(node.children.count > 0 ? "folder.13-regular-medium" : "doc.13-regular-medium")
+            Image(!node.isLeaf ? "folder.13-regular-medium" : "doc.13-regular-medium")
                 .renderingMode(.template)
                 .frame(width: 16, height: 16)
                 .padding(.leading, -4)
-            
 
             Text(node.name)
-                .lineLimit(1) // If this is not present, non-leaf items will wrap
+                .lineLimit(1) // If lineLimit is not specified, non-leaf names will wrap
                 .truncationMode(.tail)
                 .allowsTightening(true)
             
@@ -54,18 +52,17 @@ struct OutlineRow<T: OutlineRepresentable>: View {
 
 
 struct OutlineBranch<T: OutlineRepresentable>: View {
-    typealias NodeType = OutlineNode<T>
-    @ObservedObject var node: NodeType
-    @Binding var selectedItem: NodeType?
+    @ObservedObject var node: OutlineNode<T>
+    @Binding var selectedItem: OutlineNode<T>?
     var level: CGFloat
     
     @ViewBuilder
     var body: some View {
         VStack(spacing: 2) { // spacing: 2 is what List uses
             if level == -1 {
-                EmptyView()
+                EmptyView() // the root node is at
             } else {
-                VStack {
+                // VStack { // we might not need this to be in a VStack
                     if node == selectedItem {
                         OutlineRow(node: node, level: level)
                             .background(Color.accentColor)
@@ -79,11 +76,11 @@ struct OutlineBranch<T: OutlineRepresentable>: View {
                             }
                         }
                     }
-                }
+                // }
             }
-            if node.open == true || level == -1 {
-                ForEach(node.childrenFoldersFirst, id: \.id) { node in
-                    OutlineBranch(node: node, selectedItem: self.$selectedItem, level: self.level + 1)
+            if node.isLeaf == false && (node.open == true || level == -1) {
+                ForEach(node.childrenFoldersFirst!, id: \.id) { node in
+                    OutlineBranch(node: node, selectedItem: self.$selectedItem, level: self.level + 1).debug()
                 }
                 // .padding(.leading, node.isRoot ? 0 : 24)
 
@@ -96,26 +93,21 @@ struct OutlineBranch<T: OutlineRepresentable>: View {
 }
 
 struct OutlineSection<T: OutlineRepresentable>: View {
-    typealias NodeType = OutlineNode<T>
-    var rootNode: NodeType
-    @Binding var selectedItem: NodeType?
+    @Binding var outlineTree: OutlineTree<T>  // We need to keep the tree outside of the object itself.
+    @Binding var selectedItem: OutlineNode<T>? // Maybe this could be a value for a subtree?
     
-    init(rootItem: T, selectedItem: Binding<NodeType?>) {
-        self.rootNode = OutlineNode(item: rootItem)
-        self._selectedItem = selectedItem
-    }
+    // init(items: [T], selectedItem: Binding<NodeType?>) {
+    //     self.outlineTree = OutlineTree(representedObjects: items)
+    //     self._selectedItem = selectedItem
+    // }
+    
+    // init(outlineTree: OutlineTree, selected
     
     var body: some View {
-        // Embedding it in a List rather than a ScrollView might let me tag items for selection.
-        // It also definitely gives it different metrics — a margin in the window, for example. Not sure which is better.
         List {
             // The padding in the section header is there to adjust for the inset hack.
-            Section(header: Text(self.rootNode.name).padding(.leading, 8)) {
-                OutlineBranch(node: rootNode, selectedItem: self.$selectedItem, level: -1)
-                // ForEach(rootNode.childrenFoldersFirst, id: \.id) { node in
-                //     OutlineBranch(node: node, selectedItem: self.$selectedItem, level: 1)
-                // }
-                // Spacer()
+            Section(header: Text(self.outlineTree.rootNode.name).padding(.leading, 8)) {
+                OutlineBranch<T>(node: self.outlineTree.rootNode, selectedItem: self.$selectedItem, level: -1)
             }
             .collapsible(false)
         }
@@ -126,20 +118,29 @@ struct OutlineSection<T: OutlineRepresentable>: View {
     }
 }
 
-// extension OutlineSection {
-//     init(item: T) {
-//         self.rootNode = OutlineNode(item: item)
-//         // self.selectedItem = nil
-//     }
-// }
 
 
+extension OutlineBranch {
+    func debug() -> some View {
+        print("Branch Object")
+        print(self.node.name)
+        print(self.node.open)
+        return self
+    }
+}
+
+extension OutlineRow {
+    func debug() -> some View {
+        print("Row Object")
+        print(self.node.name)
+        print(self.node.open)
+        return self
+    }
+}
 
 // struct Outline_Previews: PreviewProvider {
 //     static var previews: some View {
-//         let example = exampleData()
-//         
-//         return OutlineSection(rootItem: example, selectedItem: .constant(nil))
+//         return OutlineSection(outlineTree: OutlineTree(representedObjects: exampleArray()), selectedItem: .constant(nil))
 //             .frame(width: 200)
 //     }
 // }
