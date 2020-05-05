@@ -93,7 +93,7 @@ struct OutlineBranch<T: OutlineRepresentable>: View {
 }
 
 struct OutlineSection<T: OutlineRepresentable>: View {
-    @Binding var outlineTree: OutlineTree<T>  // We need to keep the tree outside of the object itself.
+    @EnvironmentObject var outlineTree: OutlineTree<T>  // We need to keep the tree outside of the object itself.
     @Binding var selectedItem: OutlineNode<T>? // Maybe this could be a value for a subtree?
     
     // init(items: [T], selectedItem: Binding<NodeType?>) {
@@ -106,8 +106,11 @@ struct OutlineSection<T: OutlineRepresentable>: View {
     var body: some View {
         List {
             // The padding in the section header is there to adjust for the inset hack.
+            
             Section(header: Text(self.outlineTree.rootNode.name).padding(.leading, 8)) {
-                OutlineBranch<T>(node: self.outlineTree.rootNode, selectedItem: self.$selectedItem, level: -1)
+                ForEach(outlineTree.getNodeArray()) { item in
+                    OutlineRow(node: item, level: item.level!)
+                }
             }
             .collapsible(false)
         }

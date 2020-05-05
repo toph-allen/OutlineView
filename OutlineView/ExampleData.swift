@@ -95,6 +95,14 @@ func exampleRoot() -> ExampleClass {
 }
 
 
+class ExampleData: ObservableObject {
+    let items: [ExampleClass]
+    
+    init() {
+         items = exampleArray()
+    }
+}
+
 func exampleArray() -> [ExampleClass] {
     let i11 = ExampleClass(name: "Item 1.1")
     let i12 = ExampleClass(name: "Item 1.2")
@@ -141,6 +149,5 @@ func exampleArray() -> [ExampleClass] {
     
     return [i11, i12, i13, i1, i221, i222, i223, i21, i22, i23, i2, i31, i32, i33, i3, i421, i422, i423, i424, i425, i426, i427, i428, i441, i442, i443, i444, i41, i42, i43, i44, i4]
 }
-
 
 

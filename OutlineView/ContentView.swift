@@ -10,10 +10,10 @@ import SwiftUI
 
 
 struct ContentView: View {
-    let items: [ExampleClass] = exampleArray()
+    @EnvironmentObject var exampleData: ExampleData
     
     var body: some View {
-        SplitView(items: items)
+        SplitView()
     }
 }
 

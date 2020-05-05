@@ -27,6 +27,7 @@ class OutlineNode<T: OutlineRepresentable>: ObservableObject, Identifiable, Hash
     var representedObject: T?
     var children: [OutlineNode]?
     var parent: OutlineNode?
+    var level: CGFloat? = nil
     var selectable: Bool = true
     @Published var open: Bool = false
     
@@ -101,8 +102,9 @@ class OutlineNode<T: OutlineRepresentable>: ObservableObject, Identifiable, Hash
 
 
 class OutlineTree<T: OutlineRepresentable>: ObservableObject {
+    typealias NodeType = OutlineNode<T>
     var representedObjects: [T]
-    var rootNode: OutlineNode<T>
+    var rootNode: NodeType
 
     init(representedObjects: [T]) {
         self.representedObjects = representedObjects
@@ -112,6 +114,27 @@ class OutlineTree<T: OutlineRepresentable>: ObservableObject {
             OutlineNode(representedObject: representedObject)
         })
         self.rootNode = OutlineNode(children: rootChildren)
+    }
+    
+    func getNodeArray() -> [NodeType] {
+        func addNodeBranch(node: NodeType, nodeArray: inout [NodeType], currentLevel: CGFloat) {
+            if currentLevel > -1 { // Do not add the root node to displayed nodes.
+                node.level = currentLevel
+                nodeArray.append(node)
+            }
+            if node.isLeaf == false && (node.open == true || currentLevel == -1) {
+                for child in node.childrenFoldersFirst ?? [] {
+                    addNodeBranch(node: child, nodeArray: &nodeArray, currentLevel: currentLevel + 1)
+                }
+                return
+            } else {
+                return
+            }
+        }
+        
+        var nodeArray = [NodeType]()
+        addNodeBranch(node: rootNode, nodeArray: &nodeArray, currentLevel: -1)
+        return nodeArray
     }
 }
 

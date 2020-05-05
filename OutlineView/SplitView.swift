@@ -9,16 +9,13 @@
 import SwiftUI
 
 struct SplitView: View {
-    @State var outlineTree: OutlineTree<ExampleClass>
+    @EnvironmentObject var exampleData: ExampleData
     @State var selectedItem: OutlineNode<ExampleClass>? = nil
-    
-    init(items: [ExampleClass]) {
-        _outlineTree = State(initialValue: OutlineTree(representedObjects: items))
-    }
+    @State var outlineTree: OutlineTree<ExampleClass> = ExampleData.
     
     var body: some View {
         NavigationView {
-            OutlineSection(outlineTree: $outlineTree, selectedItem: $selectedItem)
+            OutlineSection(outlineTree: outlineTree, selectedItem: $selectedItem)
                 .frame(minWidth: 200, maxHeight: .infinity)
             DetailView(item: selectedItem?.representedObject)
                 .frame(maxHeight: .infinity)
