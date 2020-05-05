@@ -105,7 +105,6 @@ class OutlineTree<T: OutlineRepresentable>: ObservableObject {
     var rootNode: OutlineNode<T>
 
     init(representedObjects: [T]) {
-        print("Making a new OutlineTree")
         self.representedObjects = representedObjects
         let rootChildren = representedObjects.filter({
             $0.parent == nil

@@ -80,7 +80,7 @@ struct OutlineBranch<T: OutlineRepresentable>: View {
             }
             if node.isLeaf == false && (node.open == true || level == -1) {
                 ForEach(node.childrenFoldersFirst!, id: \.id) { node in
-                    OutlineBranch(node: node, selectedItem: self.$selectedItem, level: self.level + 1).debug()
+                    OutlineBranch(node: node, selectedItem: self.$selectedItem, level: self.level + 1)
                 }
                 // .padding(.leading, node.isRoot ? 0 : 24)
 
@@ -120,27 +120,10 @@ struct OutlineSection<T: OutlineRepresentable>: View {
 
 
 
-extension OutlineBranch {
-    func debug() -> some View {
-        print("Branch Object")
-        print(self.node.name)
-        print(self.node.open)
-        return self
-    }
-}
-
-extension OutlineRow {
-    func debug() -> some View {
-        print("Row Object")
-        print(self.node.name)
-        print(self.node.open)
-        return self
-    }
-}
 
 // struct Outline_Previews: PreviewProvider {
 //     static var previews: some View {
-//         return OutlineSection(outlineTree: OutlineTree(representedObjects: exampleArray()), selectedItem: .constant(nil))
+//         return OutlineSection<<#T: OutlineRepresentable#>>(outlineTree: OutlineTree(representedObjects: exampleArray()), selectedItem: .constant(nil))
 //             .frame(width: 200)
 //     }
 // }
