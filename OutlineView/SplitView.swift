@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct SplitView: View {
-    @State var outlineTree: OutlineTree<ExampleClass>
+    @State var outlineTree: OutlineTree<ExampleClass, [ExampleClass]>
     @State var selectedItem: OutlineNode<ExampleClass>? = nil
     
     init(items: [ExampleClass]) {
@@ -25,7 +25,7 @@ struct SplitView: View {
         }
     }
 }
-// 
+
 // struct SplitView_Previews: PreviewProvider {
 //     static var previews: some View {
 //         let item = exampleData()

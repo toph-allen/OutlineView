@@ -21,7 +21,6 @@ protocol OutlineRepresentable: ObservableObject, Identifiable, Hashable {
 // Maybe I need to move the equatable and hashable requirements to *here*, because then OutlineNode's equatable and hashable things will be based off of its .item. Like its `.hash()` function would just be `.item.hash()`?
 
 
-
 class OutlineNode<T: OutlineRepresentable>: ObservableObject, Identifiable, Hashable {
     // var id: UUID = UUID()
     var representedObject: T?
@@ -100,7 +99,7 @@ class OutlineNode<T: OutlineRepresentable>: ObservableObject, Identifiable, Hash
 }
 
 
-class OutlineTree<T: OutlineRepresentable>: ObservableObject {
+class OutlineTree<T: OutlineRepresentable, U: RandomAccessCollection>: ObservableObject where U.Element == T {
     var representedObjects: [T]
     var rootNode: OutlineNode<T>
 
