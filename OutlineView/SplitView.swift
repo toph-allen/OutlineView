@@ -1,24 +1,24 @@
-// //
-// //  SplitView.swift
-// //  OutlineView
-// //
-// //  Created by Toph Allen on 4/14/20.
-// //  Copyright © 2020 Toph Allen. All rights reserved.
-// //
+//
+//  SplitView.swift
+//  OutlineView
+//
+//  Created by Toph Allen on 4/14/20.
+//  Copyright © 2020 Toph Allen. All rights reserved.
+//
 
 import SwiftUI
 
 struct SplitView: View {
-    @State var outlineTree: OutlineTree<ExampleClass, [ExampleClass]>
+    var outlineTree: OutlineTree<ExampleClass, [ExampleClass]>
     @State var selectedItem: OutlineNode<ExampleClass>? = nil
     
     init(items: [ExampleClass]) {
-        _outlineTree = State(initialValue: OutlineTree(representedObjects: items))
+        outlineTree = OutlineTree(representedObjects: items)
     }
     
     var body: some View {
         NavigationView {
-            OutlineSection(outlineTree: $outlineTree, selectedItem: $selectedItem)
+            OutlineSection<ExampleClass, [ExampleClass]>(selectedItem: $selectedItem).environmentObject(outlineTree)
                 .frame(minWidth: 200, maxHeight: .infinity)
             DetailView(item: selectedItem?.representedObject)
                 .frame(maxHeight: .infinity)

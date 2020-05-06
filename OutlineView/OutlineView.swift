@@ -94,7 +94,7 @@ struct OutlineBranch<T: OutlineRepresentable>: View {
 
 
 struct OutlineSection<T: OutlineRepresentable, U: RandomAccessCollection>: View where U.Element == T {
-    @Binding var outlineTree: OutlineTree<T, U>  // We need to keep the tree outside of the object itself.
+    @EnvironmentObject var outlineTree: OutlineTree<T, U>  // We need to keep the tree outside of the object itself.
     @Binding var selectedItem: OutlineNode<T>? // Maybe this could be a value for a subtree?
     
     // init(items: [T], selectedItem: Binding<NodeType?>) {
