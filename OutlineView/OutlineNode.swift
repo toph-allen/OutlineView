@@ -1,5 +1,5 @@
 //
-//  OutlineData.swift
+//  OutlineNode.swift
 //  OutlineView
 //
 //  Created by Toph Allen on 4/13/20.
@@ -98,12 +98,13 @@ class OutlineNode<T: OutlineRepresentable>: ObservableObject, Identifiable, Hash
     }
 }
 
-
+// This change should make it so that I can initialize this with any random access collection.
 class OutlineTree<T: OutlineRepresentable, U: RandomAccessCollection>: ObservableObject where U.Element == T {
-    var representedObjects: [T]
+    var representedObjects: U
     var rootNode: OutlineNode<T>
-
-    init(representedObjects: [T]) {
+    var name: String?
+    
+    init(representedObjects: U, name: String? = nil) {
         self.representedObjects = representedObjects
         let rootChildren = representedObjects.filter({
             $0.parent == nil
@@ -111,7 +112,9 @@ class OutlineTree<T: OutlineRepresentable, U: RandomAccessCollection>: Observabl
             OutlineNode(representedObject: representedObject)
         })
         self.rootNode = OutlineNode(children: rootChildren)
+        self.name = name
     }
 }
+
 
 
