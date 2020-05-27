@@ -83,7 +83,7 @@ class OutlineNode<T: OutlineRepresentable>: ObservableObject, Identifiable, Hash
         if self.representedObject?.children != nil {
             self.children = [OutlineNode]()
             for child in representedObject!.children! {
-                self.children!.append(OutlineNode(representedObject: child, parent: self))
+                self.children!.append(OutlineNode(representedObject: (child as! T), parent: self))
             }
         }
         

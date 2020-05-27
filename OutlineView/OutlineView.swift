@@ -18,7 +18,7 @@ struct OutlineRow<T: OutlineRepresentable>: View {
     var body: some View {
         HStack {
             Group {
-                if !node.isLeaf {
+                if !node.isLeaf { 
                     Image(node.open == false ? "arrowtriangle.right.fill.13-regular-small" : "arrowtriangle.down.fill.13-regular-small")
                         .renderingMode(.template)
                         .foregroundColor(Color.secondary)
