@@ -11,7 +11,7 @@ import Combine
 
 
 // This view handles displaying the contents of each row for its object. Clicking its arrow image also toggles a node's open state.
-struct OutlineRow<T: OutlineRepresentable>: View {
+struct OutlineRow<T: OutlineRepresentable>: View where T: Identifiable, T: Hashable, T: ObservableObject {
     @ObservedObject var node: OutlineNode<T>
     var level: CGFloat
     
@@ -51,7 +51,7 @@ struct OutlineRow<T: OutlineRepresentable>: View {
 }
 
 
-struct OutlineBranch<T: OutlineRepresentable>: View {
+struct OutlineBranch<T: OutlineRepresentable>: View where T: Identifiable, T: Hashable, T: ObservableObject {
     @ObservedObject var node: OutlineNode<T>
     @Binding var selectedItem: OutlineNode<T>?
     var level: CGFloat
@@ -93,7 +93,7 @@ struct OutlineBranch<T: OutlineRepresentable>: View {
 }
 
 
-struct OutlineSection<T: OutlineRepresentable, U: RandomAccessCollection>: View where U.Element == T {
+struct OutlineSection<T: OutlineRepresentable, U: RandomAccessCollection>: View where T: Identifiable, T: Hashable, T: ObservableObject, U.Element == T {
     @EnvironmentObject var outlineTree: OutlineTree<T, U>  // We need to keep the tree outside of the object itself.
     @Binding var selectedItem: OutlineNode<T>? // Maybe this could be a value for a subtree?
     

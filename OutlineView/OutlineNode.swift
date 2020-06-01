@@ -10,18 +10,18 @@ import Foundation
 
 let foldersHaveContent: Bool = false
 
-
-protocol OutlineRepresentable: ObservableObject, Identifiable, Hashable {
+protocol OutlineRepresentable {
     var name: String { get }
-    var children: [Self]? { get }
-    var parent: Self? { get }
+    var children: [OutlineRepresentable]? { get }
+    var parent: OutlineRepresentable? { get }
     var hasContent: Bool { get }
 }
+
 // TODO: The way to go forward with this is to then give OutlineNode an `init()` method for OutlineRepresentable objects, and then maybe to give RootItem a similar method? And also to make a class? of object called OutlineViewData, and give it a method to init from a random access collection of OutlineRepresentable items.
 // Maybe I need to move the equatable and hashable requirements to *here*, because then OutlineNode's equatable and hashable things will be based off of its .item. Like its `.hash()` function would just be `.item.hash()`?
 
 
-class OutlineNode<T: OutlineRepresentable>: ObservableObject, Identifiable, Hashable {
+class OutlineNode<T: OutlineRepresentable>: ObservableObject, Identifiable, Hashable where T: Identifiable, T: Hashable, T: ObservableObject {
     // var id: UUID = UUID()
     var representedObject: T?
     var children: [OutlineNode]?
@@ -99,7 +99,7 @@ class OutlineNode<T: OutlineRepresentable>: ObservableObject, Identifiable, Hash
 }
 
 // This change should make it so that I can initialize this with any random access collection.
-class OutlineTree<T: OutlineRepresentable, U: RandomAccessCollection>: ObservableObject where U.Element == T {
+class OutlineTree<T: OutlineRepresentable, U: RandomAccessCollection>: ObservableObject where U.Element == T, T: Identifiable, T: Hashable, T: ObservableObject {
     var representedObjects: U
     var rootNode: OutlineNode<T>
     var name: String?

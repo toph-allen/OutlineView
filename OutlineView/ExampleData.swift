@@ -9,11 +9,11 @@
 import Foundation
 
 
-final class ExampleClass: OutlineRepresentable {
+final class ExampleClass: OutlineRepresentable, ObservableObject, Identifiable, Hashable {
     let id: UUID = UUID()
     let name: String
-    var children: [ExampleClass]?
-    var parent: ExampleClass?
+    var children: [OutlineRepresentable]?
+    var parent: OutlineRepresentable?
     let hasContent: Bool
     
     static func == (lhs: ExampleClass, rhs: ExampleClass) -> Bool {
